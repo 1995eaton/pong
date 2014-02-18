@@ -1,0 +1,49 @@
+body {
+  overflow: hidden;
+  background-color: #000;
+}
+
+#paddle {
+  position: absolute;
+  width: 24px;
+  height: 130px;
+  background-color: #fff;
+}
+
+#ball {
+  position: absolute;
+  height: 24px; width: 24px;
+  background-color: #fff;
+}
+
+#center {
+  position: absolute;
+  width: 0px;
+  height: 100%; top: 0;
+  border: 3px dotted #fff;
+  opacity: 0.3;
+}
+
+#pressSpaceBox {
+  position: absolute;
+  font-family: scoreFont;
+  font-size: 24pt;
+  color: #fff;
+  width: 800px;
+  text-align: center;
+  height: 100px;
+  display: none;
+}
+
+@font-face {
+  font-family: scoreFont;
+  src: url('assets/score_font.ttf');
+}
+
+#score {
+  position: absolute;
+  font-family: scoreFont;
+  color: #fff;
+  font-size: 24pt;
+  opacity: 0.3;
+}
