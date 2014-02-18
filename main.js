@@ -1,10 +1,13 @@
 var addPlayers, addBall, randRange, gameStart, updateScore, addScores;
 var player1, player1s, y1, player2, player2s, y2;
+var upPressed, downPressed;
 
 var ball, ballX, ballY, reset, cDiv, continuePrompt;
 
 var p1Lost = false;
 var p2Lost = false;
+
+var keySpeed = 4;
 
 var gameStarted = false;
 
@@ -36,11 +39,11 @@ updateScore = function(winner) {
 
   if (winner === "Player 1" && player1s.innerHTML < winningScore) {
     player1s.innerHTML++;
-    cDiv.innerHTML = winner+" scored!";
+    cDiv.innerHTML = winner+" scored!<br/><br/>Press space to continue";
     continuePrompt(true);
   } else if (winner === "Player 2" && player2s.innerHTML < winningScore) {
     player2s.innerHTML++;
-    cDiv.innerHTML = winner+" scored!";
+    cDiv.innerHTML = winner+" scored!<br/><br/>Press space to continue";
     continuePrompt(true);
   }
 
@@ -214,8 +217,61 @@ onMouseMove = function(e) {
   player2.style.top = y2+"px";
 }
 
-onKeyDown = function(e) { // let space be used to continue
+keyMovement = function() {
+  setInterval(function() {
+    if (upPressed) {
+      if (y1 >= 0) {
+        y1 -= keySpeed;
+        player1.style.top = y1+"px"; //75 -> paddle-height
+      }
+      if (y2 >= 0) {
+        y2 -= keySpeed;
+      }
+    }
+    if (downPressed) {
+      if (y1 <= window.innerHeight-130) {
+        y1 += keySpeed;
+      }
+      if (y2 <= window.innerHeight-130) {
+        y2 += keySpeed;
+      }
+    }
+    player1.style.top = y1+"px"; //75 -> paddle-height
+    player2.style.top = y2+"px";
+  }, 0);
+}
 
+onKeyUp = function(e) {
+  switch (e.which) {
+    case 38:
+      upPressed = false;
+    case 40:
+      downPressed = false;
+    default:
+      break;
+  }
+}
+
+onKeyPress = function(e) { // let space be used to continue
+
+  console.log(e.which);
+  switch (e.which) {
+    case 32:
+      if (!gameStarted) {
+        gameStarted = true;
+        continuePrompt(false);
+        moveBall();
+        break;
+      }
+    case 38: // up arrow
+      upPressed = true;
+      break;
+    case 40:
+      downPressed = true;
+      break;
+    default:
+      break;
+  }
   if (e.which == 32 && !gameStarted) {
     gameStarted = true;
     continuePrompt(false);
@@ -235,9 +291,11 @@ onMouseDown = function(e) { // also allow click to continue
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  document.addEventListener("keydown", onKeyDown, false);
+  document.addEventListener("keydown", onKeyPress, false);
+  document.addEventListener("keyup", onKeyUp, false);
   document.addEventListener("mousemove", onMouseMove, false);
   document.addEventListener("mousedown", onMouseDown, false);
   document.getElementById("center").style.left = window.innerWidth/2-3+"px"; //3 -> center-width
+  keyMovement();
   gameStart();
 });
